@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<proxy name="Hello2Service" startOnLoad="true" trace="disable"
+  transports="http https" xmlns="http://ws.apache.org/ns/synapse">
+  <target>
+    <endpoint name="endpoint_urn_uuid_1c4941dd-dc66-4f9e-ba4b-ac6271047960">
+      <address trace="disable" uri="http://localhost:9764/HelloWorldJaxWS-1.0.0-SNAPSHOT/services/hello_world"/>
+    </endpoint>
+    <inSequence>
+      <log level="full"/>
+      <header name="Action" scope="default" value=""/>
+      <property name="SOAPAction" scope="transport" type="STRING" value=""/>
+      <payloadFactory media-type="xml">
+        <format>
+          <wso2:hello xmlns:wso2="http://wso2.workshop.in2.es/">
+            <name xmlns="">$1 $2</name>
+          </wso2:hello>
+        </format>
+        <args>
+          <arg evaluator="xml" expression="//wso2:hello/name" xmlns:wso2="http://wso2.workshop.in2.es/"/>
+          <arg evaluator="xml" expression="//wso2:hello/surname" xmlns:wso2="http://wso2.workshop.in2.es/"/>
+        </args>
+      </payloadFactory>
+    </inSequence>
+    <outSequence>
+      <log/>
+      <send/>
+    </outSequence>
+    <faultSequence/>
+  </target>
+  <publishWSDL key="Hello2Service.wsdl"/>
+</proxy>
